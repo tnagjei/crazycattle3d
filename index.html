@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Play Crazy Cattle 3D Online - Free Multiplayer Cattle Racing Game | FastenPipes</title>
+    <meta name="description" content="Experience the thrill of Crazy Cattle 3D, a free multiplayer cattle racing game. Join millions of players worldwide in this exciting adventure with stunning 3D graphics and endless fun.">
+    <link rel="canonical" href="https://fastenpipes.com">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+        :root {
+            --primary-color: #4CAF50;
+            --primary-light: #81C784;
+            --primary-dark: #388E3C;
+            --accent-color: #FFC107;
+            --text-color: #333333;
+            --bg-color: #F1F8E9;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+        .game-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+        }
+        .game-iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            margin: 0;
+            padding: 0;
+            display: block;
+            transform: scale(1.2) translateX(7.5%);
+            transform-origin: center center;
+            clip-path: inset(0 20% 10% 30%);
+        }
+        @media (max-width: 768px) {
+            .game-iframe {
+                transform: scale(1) translateX(0);
+                clip-path: none;
+            }
+        }
+        .fullscreen-btn {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(76, 175, 80, 0.8);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .fullscreen-btn:hover {
+            background: rgba(76, 175, 80, 1);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(5px);
+            border-bottom: 3px solid var(--primary-color);
+        }
+        main {
+            margin: 0;
+            padding: 0;
+        }
+        .content-section {
+            background: white;
+            padding-top: 2rem;
+        }
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--primary-dark);
+            text-align: center;
+            z-index: 1000;
+            animation: bounce 2s infinite;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 10px 20px;
+            border-radius: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0) translateX(-50%);
+            }
+            40% {
+                transform: translateY(-20px) translateX(-50%);
+            }
+            60% {
+                transform: translateY(-10px) translateX(-50%);
+            }
+        }
+        .section-title {
+            color: var(--primary-dark);
+            position: relative;
+            display: inline-block;
+            margin-bottom: 1.5rem;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--primary-color);
+            border-radius: 3px;
+        }
+        .card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 2px solid var(--primary-light);
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+        .feature-icon {
+            background: var(--primary-light);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+        }
+        .review-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid var(--primary-color);
+        }
+        footer {
+            background: var(--primary-dark);
+            color: white;
+            padding: 2rem 0;
+        }
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        .section-padding {
+            padding: 4rem 0;
+        }
+        .section-bg-white {
+            background-color: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        .section-bg-light {
+            background-color: var(--bg-color);
+        }
+        .grid-container {
+            display: grid;
+            gap: 2rem;
+        }
+        .grid-2 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        .grid-3 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+        .grid-4 {
+            grid-template-columns: repeat(4, 1fr);
+        }
+        /* Logo Styles */
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            position: relative;
+        }
+        .logo-icon::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: var(--primary-color);
+            border-radius: 50%;
+            z-index: 1;
+        }
+        .logo-icon::after {
+            content: '';
+            position: absolute;
+            width: 70%;
+            height: 70%;
+            background: white;
+            border-radius: 50%;
+            top: 15%;
+            left: 15%;
+            z-index: 2;
+        }
+        .logo-cattle {
+            position: absolute;
+            width: 60%;
+            height: 60%;
+            top: 20%;
+            left: 20%;
+            z-index: 3;
+            background: var(--primary-dark);
+            border-radius: 50% 50% 40% 40%;
+        }
+        .logo-cattle::before {
+            content: '';
+            position: absolute;
+            width: 30%;
+            height: 30%;
+            background: var(--primary-dark);
+            border-radius: 50%;
+            top: -15%;
+            left: 35%;
+        }
+        .logo-cattle::after {
+            content: '';
+            position: absolute;
+            width: 20%;
+            height: 20%;
+            background: white;
+            border-radius: 50%;
+            top: 30%;
+            left: 40%;
+        }
+        .logo-text {
+            font-weight: 700;
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-color) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .logo-tagline {
+            font-size: 0.8rem;
+            color: var(--primary-dark);
+            margin-top: -5px;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .section-padding {
+                padding: 2rem 0;
+            }
+            
+            .section-container {
+                padding: 0 1.5rem;
+            }
+            
+            .grid-2, .grid-3, .grid-4 {
+                grid-template-columns: 1fr;
+            }
+            
+            .logo-text {
+                font-size: 1.5rem;
+            }
+            
+            .logo-icon {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .feature-icon {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .card {
+                margin-bottom: 1rem;
+            }
+            
+            .review-card {
+                padding: 1rem;
+            }
+            
+            .fullscreen-btn {
+                padding: 6px 12px;
+                font-size: 0.9rem;
+            }
+            
+            .scroll-indicator {
+                padding: 8px 16px;
+                font-size: 0.9rem;
+            }
+            
+            .history-card, .milestone-card {
+                padding: 1rem;
+            }
+            
+            .history-card h3, .milestone-card h4 {
+                font-size: 1.2rem;
+            }
+            
+            .history-card h4, .milestone-card p {
+                font-size: 1rem;
+            }
+            
+            .history-card p, .milestone-card p {
+                font-size: 0.9rem;
+            }
+            
+            .section-bg-white {
+                padding: 1.5rem;
+            }
+            
+            .feature-card {
+                padding: 1rem;
+            }
+            
+            .feature-card h3 {
+                font-size: 1.2rem;
+            }
+            
+            .feature-card p {
+                font-size: 0.9rem;
+            }
+            
+            .btn-primary {
+                padding: 8px 16px;
+                font-size: 0.9rem;
+            }
+            
+            #game-error {
+                padding: 1rem;
+            }
+            
+            #game-error h3 {
+                font-size: 1.5rem;
+            }
+            
+            #game-error p, #game-error li {
+                font-size: 0.9rem;
+            }
+            
+            footer {
+                padding: 1.5rem 0;
+            }
+            
+            footer p {
+                font-size: 0.9rem;
+            }
+        }
+        
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .grid-3, .grid-4 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .section-container {
+                padding: 0 2rem;
+            }
+        }
+        
+        /* Touch Device Optimizations */
+        @media (hover: none) {
+            .card:hover {
+                transform: none;
+            }
+            
+            .btn-primary:hover {
+                transform: none;
+            }
+            
+            .fullscreen-btn:hover {
+                transform: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="shadow-md">
+        <div class="section-container py-4 flex items-center justify-between">
+            <div class="flex items-center">
+                <div class="logo-container">
+                    <div class="logo-icon">
+                        <div class="logo-cattle"></div>
+                    </div>
+                    <div>
+                        <h1 class="logo-text">Crazy Cattle 3D</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Game Section -->
+    <main>
+        <div class="game-container">
+            <iframe 
+            src="https://crazy-cattle3d.org/game/crazycattle3d/" 
+            width="800" 
+            height="600" 
+            frameborder="0" 
+            allowfullscreen 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+            </iframe>
+            <div id="game-error" class="hidden absolute inset-0 flex items-center justify-center bg-black bg-opacity-80 text-white text-center p-8">
+                <div>
+                    <h3 class="text-2xl font-bold mb-4">Game Loading Issue</h3>
+                    <p class="mb-4">We're having trouble loading the game. Please try the following:</p>
+                    <ul class="list-disc list-inside mb-4">
+                        <li>Refresh the page</li>
+                        <li>Try a different browser</li>
+                        <li>Check your internet connection</li>
+                        <li>Disable ad blockers or security software</li>
+                    </ul>
+                    <button onclick="retryLoading()" class="btn-primary">
+                        Retry Loading
+                    </button>
+                </div>
+            </div>
+            <button class="fullscreen-btn" onclick="toggleFullscreen()">
+                Fullscreen
+            </button>
+            <div class="scroll-indicator">
+                <p>Scroll down to explore more</p>
+                <svg class="w-6 h-6 mx-auto mt-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Content Sections -->
+        <div class="content-section">
+            <!-- Game Screenshots -->
+            <section id="screenshots" class="section-padding section-bg-light">
+                <div class="section-container">
+                    <h2 class="text-3xl font-bold text-center section-title">Game Screenshots</h2>
+                    <div class="grid-container grid-3 mt-8">
+                        <div class="card">
+                            <img src="images/001.png" alt="Epic Racing Action" class="w-full h-48 object-cover">                            
+                        </div>
+                        <div class="card">
+                            <img src="images/002.png" alt="Multiplayer Action" class="w-full h-48 object-cover">                            
+                        </div>
+                        <div class="card">
+                            <img src="images/003.png" alt="Special Powers" class="w-full h-48 object-cover">                            
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Game Features -->
+            <section id="features" class="section-padding section-bg-white">
+                <div class="section-container">
+                    <h2 class="text-3xl font-bold text-center section-title">Game Features</h2>
+                    <div class="grid-container grid-2 mt-8">
+                        <div class="feature-card p-6 bg-green-50 rounded-lg">
+                            <div class="feature-icon">
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-4 text-green-700">Stunning 3D Graphics</h3>
+                            <p class="text-gray-600">Immerse yourself in beautifully rendered 3D environments with smooth animations and realistic physics.</p>
+                        </div>
+                        <div class="feature-card p-6 bg-green-50 rounded-lg">
+                            <div class="feature-icon">
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-4 text-green-700">Multiplayer Experience</h3>
+                            <p class="text-gray-600">Join thousands of players worldwide in exciting multiplayer races and competitions.</p>
+                        </div>
+                        <div class="feature-card p-6 bg-green-50 rounded-lg">
+                            <div class="feature-icon">
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-4 text-green-700">Free to Play</h3>
+                            <p class="text-gray-600">Enjoy all game features completely free, with regular updates and new content.</p>
+                        </div>
+                        <div class="feature-card p-6 bg-green-50 rounded-lg">
+                            <div class="feature-icon">
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-4 text-green-700">Customizable Characters</h3>
+                            <p class="text-gray-600">Unlock and customize your characters with unique abilities and special powers.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Development History -->
+            <section id="history" class="section-padding section-bg-light">
+                <div class="section-container">
+                    <h2 class="text-3xl font-bold text-center section-title">Development History</h2>
+                    <div class="section-bg-white p-8 rounded-lg shadow-lg mt-8">
+                        <div class="grid-container grid-3">
+                            <!-- 2023 -->
+                            <div class="history-card p-6 bg-green-50 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 relative overflow-hidden">
+                                <div class="absolute top-0 right-0 w-24 h-24 bg-green-200 rounded-bl-full opacity-50"></div>
+                                <div class="feature-icon mb-4">
+                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="text-2xl font-semibold mb-2 text-green-700">2023</h3>
+                                <h4 class="text-xl font-semibold mb-3 text-green-600">The Beginning</h4>
+                                <p class="text-gray-600 mb-4">Started as a passion project by a team of dedicated developers. The initial concept was born from a love for racing games and cute characters.</p>
+                                <ul class="text-gray-600 list-disc list-inside">
+                                    <li>Concept development</li>
+                                    <li>Core mechanics design</li>
+                                    <li>Initial character designs</li>
+                                </ul>
+                            </div>
+
+                            <!-- 2024 -->
+                            <div class="history-card p-6 bg-green-50 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 relative overflow-hidden">
+                                <div class="absolute top-0 right-0 w-24 h-24 bg-green-200 rounded-bl-full opacity-50"></div>
+                                <div class="feature-icon mb-4">
+                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="text-2xl font-semibold mb-2 text-green-700">2024</h3>
+                                <h4 class="text-xl font-semibold mb-3 text-green-600">Global Launch</h4>
+                                <p class="text-gray-600 mb-4">Released to worldwide acclaim, reaching millions of players. The game's unique blend of racing action and cute characters captured players' hearts globally.</p>
+                                <ul class="text-gray-600 list-disc list-inside">
+                                    <li>Global release</li>
+                                    <li>Community building</li>
+                                    <li>First major update</li>
+                                </ul>
+                            </div>
+
+                            <!-- Future -->
+                            <div class="history-card p-6 bg-green-50 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 relative overflow-hidden">
+                                <div class="absolute top-0 right-0 w-24 h-24 bg-green-200 rounded-bl-full opacity-50"></div>
+                                <div class="feature-icon mb-4">
+                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="text-2xl font-semibold mb-2 text-green-700">Future</h3>
+                                <h4 class="text-xl font-semibold mb-3 text-green-600">Exciting Plans</h4>
+                                <p class="text-gray-600 mb-4">Continuing to expand with new features, characters, and racing tracks. Our roadmap includes exciting updates and community-driven content.</p>
+                                <ul class="text-gray-600 list-disc list-inside">
+                                    <li>New characters and tracks</li>
+                                    <li>Enhanced multiplayer features</li>
+                                    <li>Seasonal events and tournaments</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <!-- Additional Milestones -->
+                        <div class="mt-12">
+                            <h3 class="text-2xl font-semibold mb-6 text-green-700 text-center">Key Milestones</h3>
+                            <div class="grid-container grid-4">
+                                <div class="milestone-card p-4 bg-green-50 rounded-lg text-center">
+                                    <div class="feature-icon mx-auto mb-3">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                        </svg>
+                                    </div>
+                                    <h4 class="text-lg font-semibold text-green-700">1M+ Players</h4>
+                                    <p class="text-sm text-gray-600">Global community</p>
+                                </div>
+                                <div class="milestone-card p-4 bg-green-50 rounded-lg text-center">
+                                    <div class="feature-icon mx-auto mb-3">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
+                                        </svg>
+                                    </div>
+                                    <h4 class="text-lg font-semibold text-green-700">10+ Characters</h4>
+                                    <p class="text-sm text-gray-600">Unique abilities</p>
+                                </div>
+                                <div class="milestone-card p-4 bg-green-50 rounded-lg text-center">
+                                    <div class="feature-icon mx-auto mb-3">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path>
+                                        </svg>
+                                    </div>
+                                    <h4 class="text-lg font-semibold text-green-700">15+ Tracks</h4>
+                                    <p class="text-sm text-gray-600">Diverse environments</p>
+                                </div>
+                                <div class="milestone-card p-4 bg-green-50 rounded-lg text-center">
+                                    <div class="feature-icon mx-auto mb-3">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                    </div>
+                                    <h4 class="text-lg font-semibold text-green-700">24/7 Support</h4>
+                                    <p class="text-sm text-gray-600">Always available</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Development Team -->
+            <section id="team" class="section-padding section-bg-white">
+                <div class="section-container">
+                    <h2 class="text-3xl font-bold text-center section-title">Development Team</h2>
+                    <div class="grid-container grid-3 mt-8">
+                        <div class="text-center p-6 bg-green-50 rounded-lg">
+                            <div class="feature-icon mx-auto mb-4">
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2 text-green-700">Game Design</h3>
+                            <p class="text-gray-600">Led by experienced game designers with a passion for racing games</p>
+                        </div>
+                        <div class="text-center p-6 bg-green-50 rounded-lg">
+                            <div class="feature-icon mx-auto mb-4">
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2 text-green-700">Art & Animation</h3>
+                            <p class="text-gray-600">Creative artists bringing characters and worlds to life</p>
+                        </div>
+                        <div class="text-center p-6 bg-green-50 rounded-lg">
+                            <div class="feature-icon mx-auto mb-4">
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2 text-green-700">Development</h3>
+                            <p class="text-gray-600">Skilled programmers ensuring smooth gameplay experience</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- How to Play -->
+            <section id="how-to-play" class="section-padding section-bg-light">
+                <div class="section-container">
+                    <h2 class="text-3xl font-bold text-center section-title">How to Play</h2>
+                    <div class="section-bg-white p-8 rounded-lg shadow-lg mt-8">
+                        <h3 class="text-xl font-semibold mb-4 text-green-700">Getting Started</h3>
+                        <p class="text-gray-600 mb-6">Begin your adventure by selecting your favorite character and entering the race track. Use arrow keys or WASD to control movement.</p>
+                        
+                        <h3 class="text-xl font-semibold mb-4 text-green-700">Game Controls</h3>
+                        <ul class="list-disc list-inside text-gray-600 mb-6">
+                            <li>Arrow Keys / WASD: Move your character</li>
+                            <li>Spacebar: Use special abilities</li>
+                            <li>Shift: Sprint</li>
+                            <li>E: Interact with objects</li>
+                        </ul>
+
+                        <h3 class="text-xl font-semibold mb-4 text-green-700">Tips for Success</h3>
+                        <p class="text-gray-600">Master the timing of your special abilities, collect power-ups, and learn the best racing lines to achieve victory in every race.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Game Strategy Guide -->
+            <section id="strategy-guide" class="section-padding section-bg-white">
+                <div class="section-container">
+                    <h2 class="text-3xl font-bold text-center section-title">Game Strategy Guide</h2>
+                    
+                    <div class="mt-8">
+                        <h3 class="text-2xl font-semibold mb-6 text-green-700">Character Selection</h3>
+                        <div class="grid-container grid-2">
+                            <div class="p-6 bg-green-50 rounded-lg">
+                                <h4 class="text-xl font-semibold mb-2 text-green-700">Speed Characters</h4>
+                                <p class="text-gray-600 mb-4">Characters like Lightning Bull and Swift Cow excel in straightaways and open tracks. Their high top speed makes them perfect for overtaking opponents on long stretches.</p>
+                                <ul class="list-disc list-inside text-gray-600">
+                                    <li>Best for: Open tracks with few obstacles</li>
+                                    <li>Special ability: Speed boost</li>
+                                    <li>Weakness: Poor handling in tight corners</li>
+                                </ul>
+                            </div>
+                            <div class="p-6 bg-green-50 rounded-lg">
+                                <h4 class="text-xl font-semibold mb-2 text-green-700">Handling Characters</h4>
+                                <p class="text-gray-600 mb-4">Characters like Agile Heifer and Nimble Steer have superior cornering abilities. They can maintain speed through tight turns where other characters must slow down.</p>
+                                <ul class="list-disc list-inside text-gray-600">
+                                    <li>Best for: Technical tracks with many turns</li>
+                                    <li>Special ability: Perfect drift</li>
+                                    <li>Weakness: Lower top speed on straightaways</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-12">
+                        <h3 class="text-2xl font-semibold mb-6 text-green-700">Track Mastery</h3>
+                        <div class="grid-container grid-2">
+                            <div class="p-6 bg-green-50 rounded-lg">
+                                <h4 class="text-xl font-semibold mb-2 text-green-700">Racing Lines</h4>
+                                <p class="text-gray-600 mb-4">The optimal racing line is the shortest path around the track. For most corners, this means entering wide, hitting the apex (inside point of the turn), and exiting wide.</p>
+                                <ul class="list-disc list-inside text-gray-600">
+                                    <li>Brake before entering corners, not during</li>
+                                    <li>Accelerate smoothly as you exit</li>
+                                    <li>Use the entire track width when possible</li>
+                                </ul>
+                            </div>
+                            <div class="p-6 bg-green-50 rounded-lg">
+                                <h4 class="text-xl font-semibold mb-2 text-green-700">Shortcuts and Secrets</h4>
+                                <p class="text-gray-600 mb-4">Many tracks contain hidden shortcuts that can save valuable seconds. Look for alternative paths, destructible walls, or special jump pads that might reveal shortcuts.</p>
+                                <ul class="list-disc list-inside text-gray-600">
+                                    <li>Explore tracks in practice mode</li>
+                                    <li>Watch for visual cues like slightly different textures</li>
+                                    <li>Some shortcuts require specific character abilities</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-12">
+                        <h3 class="text-2xl font-semibold mb-6 text-green-700">Power-up Strategy</h3>
+                        <div class="grid-container grid-3">
+                            <div class="p-6 bg-green-50 rounded-lg">
+                                <h4 class="text-xl font-semibold mb-2 text-green-700">Offensive Items</h4>
+                                <p class="text-gray-600 mb-2">Use these to gain an advantage over opponents:</p>
+                                <ul class="list-disc list-inside text-gray-600">
+                                    <li>Horn Blast: Stuns nearby opponents</li>
+                                    <li>Hay Bale: Creates obstacles</li>
+                                    <li>Milk Splash: Reduces visibility</li>
+                                </ul>
+                            </div>
+                            <div class="p-6 bg-green-50 rounded-lg">
+                                <h4 class="text-xl font-semibold mb-2 text-green-700">Defensive Items</h4>
+                                <p class="text-gray-600 mb-2">Use these to protect yourself:</p>
+                                <ul class="list-disc list-inside text-gray-600">
+                                    <li>Shield: Blocks one attack</li>
+                                    <li>Speed Boost: Temporary acceleration</li>
+                                    <li>Repair Kit: Fixes damage</li>
+                                </ul>
+                            </div>
+                            <div class="p-6 bg-green-50 rounded-lg">
+                                <h4 class="text-xl font-semibold mb-2 text-green-700">Strategic Items</h4>
+                                <p class="text-gray-600 mb-2">Use these for tactical advantage:</p>
+                                <ul class="list-disc list-inside text-gray-600">
+                                    <li>Radar: Reveals shortcuts</li>
+                                    <li>Time Warp: Temporary speed boost</li>
+                                    <li>Teleport: Skip a section of track</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-12">
+                        <h3 class="text-2xl font-semibold mb-6 text-green-700">Advanced Techniques</h3>
+                        <div class="grid-container grid-2">
+                            <div class="p-6 bg-green-50 rounded-lg">
+                                <h4 class="text-xl font-semibold mb-2 text-green-700">Drifting</h4>
+                                <p class="text-gray-600 mb-4">Master the art of drifting to maintain speed through corners. Tap the brake while turning to initiate a drift, then counter-steer to control your slide.</p>
+                                <ul class="list-disc list-inside text-gray-600">
+                                    <li>Perfect for tight corners</li>
+                                    <li>Builds boost meter when executed correctly</li>
+                                    <li>Can be chained for consecutive corners</li>
+                                </ul>
+                            </div>
+                            <div class="p-6 bg-green-50 rounded-lg">
+                                <h4 class="text-xl font-semibold mb-2 text-green-700">Boost Management</h4>
+                                <p class="text-gray-600 mb-4">Your boost meter is a limited resource. Use it strategically at key moments rather than constantly draining it.</p>
+                                <ul class="list-disc list-inside text-gray-600">
+                                    <li>Save boost for the final lap</li>
+                                    <li>Use boost to recover from mistakes</li>
+                                    <li>Chain boost with power-ups for maximum effect</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Why Players Love It -->
+            <section id="why-players-love" class="section-padding section-bg-light">
+                <div class="section-container">
+                    <h2 class="text-3xl font-bold text-center section-title">Why Players Love It</h2>
+                    <div class="grid-container grid-2 mt-8">
+                        <div class="p-6 bg-green-50 rounded-lg">
+                            <h3 class="text-xl font-semibold mb-4 text-green-700">Engaging Gameplay</h3>
+                            <p class="text-gray-600">Fast-paced action with intuitive controls and exciting race tracks.</p>
+                        </div>
+                        <div class="p-6 bg-green-50 rounded-lg">
+                            <h3 class="text-xl font-semibold mb-4 text-green-700">Regular Updates</h3>
+                            <p class="text-gray-600">New content and features added regularly to keep the experience fresh.</p>
+                        </div>
+                        <div class="p-6 bg-green-50 rounded-lg">
+                            <h3 class="text-xl font-semibold mb-4 text-green-700">Community Focus</h3>
+                            <p class="text-gray-600">Active community with regular events and competitions.</p>
+                        </div>
+                        <div class="p-6 bg-green-50 rounded-lg">
+                            <h3 class="text-xl font-semibold mb-4 text-green-700">Free to Play</h3>
+                            <p class="text-gray-600">Enjoy all features without any cost, making it accessible to everyone.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- What Players Love -->
+            <section id="what-players-love" class="section-padding section-bg-white">
+                <div class="section-container">
+                    <h2 class="text-3xl font-bold text-center section-title">What Players Love Crazy Cattle 3D</h2>
+                    <div class="section-bg-white p-8 rounded-lg shadow-lg mt-8">
+                        <div class="grid-container grid-3">
+                            <div class="text-center p-6 bg-green-50 rounded-lg">
+                                <div class="feature-icon mx-auto mb-4">
+                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="text-xl font-semibold mb-2 text-green-700">Unique Characters</h3>
+                                <p class="text-gray-600">Each character has unique abilities and personalities that make gameplay diverse and exciting.</p>
+                            </div>
+                            <div class="text-center p-6 bg-green-50 rounded-lg">
+                                <div class="feature-icon mx-auto mb-4">
+                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="text-xl font-semibold mb-2 text-green-700">Dynamic Racing</h3>
+                                <p class="text-gray-600">Every race is different with dynamic obstacles, power-ups, and unpredictable challenges.</p>
+                            </div>
+                            <div class="text-center p-6 bg-green-50 rounded-lg">
+                                <div class="feature-icon mx-auto mb-4">
+                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="text-xl font-semibold mb-2 text-green-700">Social Features</h3>
+                                <p class="text-gray-600">Connect with friends, join teams, and participate in global tournaments together.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-12 grid-container grid-2">
+                            <div class="p-6 bg-green-50 rounded-lg">
+                                <h3 class="text-xl font-semibold mb-4 text-green-700">Progression System</h3>
+                                <p class="text-gray-600">Unlock new characters, abilities, and customization options as you level up and complete challenges.</p>
+                            </div>
+                            <div class="p-6 bg-green-50 rounded-lg">
+                                <h3 class="text-xl font-semibold mb-4 text-green-700">Seasonal Events</h3>
+                                <p class="text-gray-600">Special themed events with unique rewards and challenges keep the game fresh and exciting.</p>
+                            </div>
+                            <div class="p-6 bg-green-50 rounded-lg">
+                                <h3 class="text-xl font-semibold mb-4 text-green-700">Strategic Depth</h3>
+                                <p class="text-gray-600">Master different racing strategies, power-up combinations, and character abilities for competitive advantage.</p>
+                            </div>
+                            <div class="p-6 bg-green-50 rounded-lg">
+                                <h3 class="text-xl font-semibold mb-4 text-green-700">Cross-Platform Play</h3>
+                                <p class="text-gray-600">Play with friends regardless of device - seamless experience across mobile, tablet, and desktop.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Player Reviews -->
+            <section id="reviews" class="section-padding section-bg-light">
+                <div class="section-container">
+                    <h2 class="text-3xl font-bold text-center section-title">Player Reviews</h2>
+                    <div class="grid-container grid-3 mt-8">
+                        <div class="review-card">
+                            <p class="text-gray-600 mb-4">"An incredibly fun racing game with smooth controls and amazing graphics. I can't stop playing!"</p>
+                            <p class="font-semibold text-green-700">- Alex M.</p>
+                        </div>
+                        <div class="review-card">
+                            <p class="text-gray-600 mb-4">"The multiplayer experience is fantastic. I love competing with players from around the world!"</p>
+                            <p class="font-semibold text-green-700">- Sarah K.</p>
+                        </div>
+                        <div class="review-card">
+                            <p class="text-gray-600 mb-4">"Best free racing game I've played in years. The characters are adorable and the gameplay is addictive."</p>
+                            <p class="font-semibold text-green-700">- Mike R.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-green-800 text-white py-8">
+        <div class="section-container">
+            <div class="text-center">
+                <p class="mt-2">渝ICP备2024043099号</p>
+                <p>Contact Us: ytsgabcde096@2925.com</p>  
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleFullscreen() {
+            const gameContainer = document.querySelector('.game-container');
+            if (!document.fullscreenElement) {
+                gameContainer.requestFullscreen().catch(err => {
+                    console.log(`Error attempting to enable fullscreen: ${err.message}`);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+
+        }
+        
+        // Check if iframe loaded successfully
+        window.onload = function() {
+            const iframe = document.querySelector('iframe');
+            const errorDiv = document.getElementById('game-error');
+            
+            // Set a timeout to check if iframe loaded
+            setTimeout(function() {
+                try {
+                    // Try to access iframe content - if it fails, show error
+                    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                    if (!iframeDoc || iframeDoc.body.innerHTML === '') {
+                        errorDiv.classList.remove('hidden');
+                    }
+                } catch (e) {
+                    // Cross-origin error means iframe loaded but we can't access it
+                    console.log("Iframe loaded successfully but cross-origin restrictions prevent access");
+                }
+            }, 5000); // Wait 5 seconds to check
+        };
+        
+        function handleIframeError() {
+            document.getElementById('game-error').classList.remove('hidden');
+        }
+        
+        function retryLoading() {
+            const iframe = document.querySelector('iframe');
+            const errorDiv = document.getElementById('game-error');
+            
+            // Hide error message
+            errorDiv.classList.add('hidden');
+            
+            // Reload iframe
+            iframe.src = iframe.src;
+            
+            // Check again after 5 seconds
+            setTimeout(function() {
+                try {
+                    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                    if (!iframeDoc || iframeDoc.body.innerHTML === '') {
+                        errorDiv.classList.remove('hidden');
+                    }
+                } catch (e) {
+                    console.log("Iframe reloaded successfully");
+                }
+            }, 5000);
+        }
+    </script>
+</body>
+</html> 
