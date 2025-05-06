@@ -1,0 +1,17 @@
+# Crazy Cattle 3D
+
+> Crazy Cattle 3D 是一款以牛群竞速为主题的3D多人在线休闲竞技游戏，玩家可以操控不同的牛，在丰富多样的赛道上与全球玩家实时对战，体验策略与操作并重的趣味挑战。
+
+本网站致力于为全球玩家提供免费、无门槛的3D牛群竞速游戏体验，支持好友组队、排行榜、个性化装扮等多种互动玩法，并持续更新新地图和活动内容。
+
+## 核心内容
+- `https://crazycattle3d.store/products` ：游戏产品与道具列表，介绍各类可用物品和增值服务
+- `https://crazycattle3d.store/blog` ：发布游戏攻略、更新日志、玩法技巧等内容
+
+## 常用资源
+- `https://crazycattle3d.store/faq` ：解答玩家常见问题，帮助新手快速上手
+- `https://crazycattle3d.store/contact` ：提供反馈、合作与技术支持的联系方式
+
+## 可选
+- `https://crazycattle3d.store/about` ：网站及团队简介，介绍我们的愿景与背景
+- `https://crazycattle3d.store/cases` ：玩家成功案例与社区活动展示

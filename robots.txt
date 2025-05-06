@@ -1,3 +1,32 @@
+# robots.txt基础设置
+
+# 常规搜索引擎规则
 User-agent: *
 Allow: /
-Sitemap: https://fastenpipes.com/sitemap.xml
+Disallow: /admin/
+Disallow: /private/
+
+# 网站地图
+Sitemap: https://example.com/sitemap.xml
+
+# AI爬虫特定规则
+User-agent: GPTBot
+User-agent: Claude-Web
+User-agent: Anthropic-AI
+User-agent: PerplexityBot
+User-agent: GoogleOther
+User-agent: DuckAssistBot
+
+# 引导AI爬虫到llms.txt
+User-Agent: anthropic-ai
+User-Agent: GPTBot
+Allow: /llms.txt
+Allow: /llms-full.txt
+/这里添加你能知道的所有AI模型爬虫名称。/
+# 允许AI爬虫访问
+Allow: /blog/
+Allow: /products/
+Allow: /about/
+
+# 不允许AI爬虫访问
+Disallow: /user-content/
