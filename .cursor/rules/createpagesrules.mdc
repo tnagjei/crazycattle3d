@@ -1,0 +1,105 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+
+project:
+  name: lanxk.com
+  description: 一个个人博客
+
+conventions:
+  components:
+    - rule: "使用 PascalCase 命名 Vue 组件文件"
+      example: "TemplateBase.vue"
+    - rule: "功能相似的组件放在同一目录下"
+  
+  styles:
+    - rule: "使用 kebab-case 命名 CSS 类"
+      pattern: "^[a-z][a-z0-9-]*$"
+    - rule: "遵循 BEM 命名规范"
+      examples:
+        - "block"
+        - "block__element"
+        - "block--modifier"
+    - rule: "组件样式必须使用 scoped"
+
+  state_management:
+    - rule: "使用 Pinia 管理全局状态"
+    - rule: "使用 computed 属性获取派生状态"
+    - rule: "禁止直接修改 props"
+
+forbidden_patterns:
+  - pattern: "jQuery"
+    message: "请使用 Vue 的响应式系统而不是 jQuery"
+  - pattern: "\\$\\(.*\\)"
+    message: "避免使用 DOM 直接操作"
+  - pattern: "\\.el-[a-z-]+"
+    message: "避免使用 Element Plus 的类名作为选择器"
+  - pattern: "console\\.(log|debug)"
+    message: "生产环境禁止使用 console"
+  - pattern: "setTimeout|setInterval"
+    message: "请使用 Vue 的生命周期钩子管理定时器"
+  - pattern: "document\\.getElementById"
+    message: "请使用 ref 或 template ref"
+
+directory_structure:
+  src:
+    api: "API 请求"
+    assets: 
+      styles:
+        - variables.scss
+        - mixins.scss
+        - common.scss
+        - themes/
+    components:
+      testTemplate: "题目模板组件"
+      popupComponents: "弹窗组件"
+    router: "路由配置"
+    stores: "Pinia 状态管理"
+    utils: "工具函数"
+    views: "页面组件"
+    types: "TypeScript 类型定义"
+    hooks: "可复用的组合式函数"
+    constants: "常量定义"
+    composables: "组合式函数"
+    layouts: "布局组件"
+
+tech_stack:
+  frontend:
+    - Vue 3 (version: 3.5)
+    - Element Plus
+    - Pinia
+    - TypeScript
+    - Vite
+  styling: SCSS
+  build: Vite
+  testing:
+    - Vitest
+  
+linting:
+  vue:
+    - "组件名称必须是多个单词"
+    - "Prop 定义应该尽可能详细"
+    - "组件必须包含 name 属性"
+    - "事件名称必须使用 kebab-case"
+    - "组件必须有描述性注释"
+  style:
+    - "禁止使用行内样式"
+    - "必须使用 SCSS 变量管理主题色"
+  typescript:
+    - "必须显式声明类型"
+    - "禁止使用 any"
+    - "必须使用 const 声明不会被重新赋值的变量"
+    - "禁止使用 namespace"
+    - "优先使用接口而不是类型别名"
+
+  naming:
+    - rule: "store 文件使用 camelCase 命名，以 Store 结尾"
+      example: "userStore.ts"
+    - rule: "接口文件使用 PascalCase 命名"
+      example: "UserService.ts"
+
+git:
+  commit_convention:
